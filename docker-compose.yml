@@ -104,6 +104,18 @@ services:
       - back-tier
       - front-tier
     restart: always
+    
+  postgresql:
+    image: postgres:12.3
+    volumes:
+      - /usr/share/crondata/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=CronData2021..
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB = cron_data
+    ports:
+      - 5432:5432
 
 #  pushgateway:
 #    image: prom/pushgateway
