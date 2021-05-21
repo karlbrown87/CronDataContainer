@@ -131,7 +131,7 @@ services:
       - DB_PASS=CronData2021..
 
   cron_backend:
-    image: crondatabackend
+    image: utmstack.azurecr.io/crondata-backend
     restart: always
     networks:
       - back-tier
@@ -158,7 +158,6 @@ services:
       - prometheus
       - cron_backend
     environment:
-      - DB_HOST=postgresql
-      - DB_PASS=CronData2021..
+      - DB_HOST=${HOSTNAME}
     ports: 
       - 4200:80
