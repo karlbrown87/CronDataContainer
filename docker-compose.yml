@@ -11,7 +11,6 @@ networks:
   back-tier:
 
 services:
-
   prometheus:
     image: prom/prometheus
     volumes:
@@ -27,17 +26,11 @@ services:
     links:
       - cadvisor:cadvisor
       - alertmanager:alertmanager
-#      - pushgateway:pushgateway
     depends_on:
       - cadvisor
-#      - pushgateway
     networks:
       - back-tier
     restart: always
-#    deploy:
-#      placement:
-#        constraints:
-#          - node.hostname == ${HOSTNAME}
 
   node-exporter:
     image: prom/node-exporter
@@ -70,10 +63,6 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-#    deploy:
-#      placement:
-#        constraints:
-#          - node.hostname == ${HOSTNAME}
 
 
   cadvisor:
@@ -138,7 +127,7 @@ services:
       - prometheus
       - cron-postgresql
     environment:
-      - DB_HOST=postgresql
+      - DB_HOST=localhost
       - DB_PASS=CronData2021..
 
   cron_backend:
@@ -156,8 +145,7 @@ services:
     ports:
      - 8080:8080
     depends_on: 
-      - crond-postgresql  
-
+      - cron-postgresql
 
   cron_frontend:
     image: utmstack.azurecr.io/crondata-frontend:latest
@@ -174,14 +162,3 @@ services:
       - DB_PASS=CronData2021..
     ports: 
       - 4200:80
-
-
-#  pushgateway:
-#    image: prom/pushgateway
-#    restart: always
-#    expose:
-#      - 9091
-#    ports:
-#      - "9091:9091"
-#    networks:
-#      - back-tier
