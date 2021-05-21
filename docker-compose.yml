@@ -3,6 +3,8 @@ version: '3.7'
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    postgres_data: {}
+
 
 networks:
   front-tier:
@@ -107,11 +109,11 @@ services:
       - front-tier
     restart: always
     
-  postgresql:
+  cron-postgresql:
     image: postgres:12.3
     restart: always
     volumes:
-      - /usr/share/crondata/postgresql/:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
       - ./postgres/init.sh:/docker-entrypoint-initdb.d/init.sh
     networks:
       - back-tier
@@ -120,8 +122,62 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=CronData2021..
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=cron_data
     ports:
       - 5432:5432
+  
+  cron_sync:
+    image: utmstack.azurecr.io/crondata-sync-agent:latest
+    restart: always
+    networks:
+      - back-tier
+      - front-tier
+    volumes_from: 
+      - prometheus
+    depends_on: 
+      - prometheus
+      - cron-postgresql
+    environment:
+      - DB_HOST=postgresql
+      - DB_PASS=CronData2021..
+    ports: 
+      -5432:5432
+
+
+  cron_backend:
+    image: crondatabackend
+    restart: always
+    networks:
+      - back-tier
+      - front-tier    
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+    ports:
+     - 8080:8080
+    depends_on: 
+      - crond-postgresql  
+
+
+  cron_frontend:
+    image: utmstack.azurecr.io/crondata-frontend:latest
+    restart: always
+    networks:
+      - back-tier
+      - front-tier
+    depends_on: 
+      - grafana
+      - prometheus
+      - cron_backend
+    environment:
+      - DB_HOST=postgresql
+      - DB_PASS=CronData2021..
+    ports: 
+      -4200:80
+
 
 #  pushgateway:
 #    image: prom/pushgateway
