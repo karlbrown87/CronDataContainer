@@ -4,7 +4,7 @@ volumes:
     prometheus_data: {}
     grafana_data: {}
     postgres_data: {}
-
+    shared_data: {}
 
 networks:
   front-tier:
@@ -16,6 +16,7 @@ services:
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
+      - shared_data:/etc/prometheus/targets
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -73,7 +74,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - 8081:8080
+      - 9001:8080
     networks:
       - back-tier
     restart: always
@@ -114,33 +115,21 @@ services:
       - POSTGRES_DB=cron_data
     ports:
       - 5432:5432
-  
-  cron_sync:
-    image: utmstack.azurecr.io/crondata-sync-agent:latest
-    restart: always
-    networks:
-      - back-tier
-      - front-tier
-    volumes_from: 
-      - prometheus
-    depends_on: 
-      - prometheus
-      - cron-postgresql
-    environment:
-      - DB_HOST=localhost
-      - DB_PASS=CronData2021..
 
   cron_backend:
     image: utmstack.azurecr.io/crondata-backend
     restart: always
     networks:
       - back-tier
-      - front-tier    
+      - front-tier   
+    volumes: 
+       - shared_data:/etc/prometheus/targets
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
+      - DB_PASS=CronData2021..
+      - PROMETHEUS_TARGET_CONFIG_PATH=/etc/prometheus/targets
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
      - 8080:8080
@@ -160,4 +149,4 @@ services:
     environment:
       - DB_HOST=${HOSTNAME}
     ports: 
-      - 4200:80
+      - 80:80
