@@ -147,6 +147,6 @@ services:
       - prometheus
       - cron_backend
     environment:
-      - DB_HOST=${HOSTNAME}
+      - SERVER_HOST=${HOSTNAME}
     ports: 
       - 80:80
