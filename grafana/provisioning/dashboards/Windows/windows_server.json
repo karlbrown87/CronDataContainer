@@ -1,7 +1,7 @@
 {
   "__inputs": [
     {
-      "name": "DS__VICTORIAMETRICS",
+      "name": "Prometheus",
       "label": " VictoriaMetrics",
       "description": "",
       "type": "datasource",
@@ -60,43 +60,17 @@
       }
     ]
   },
-  "description": "Windows的Prometheus监控看板展示，增加了资源汇总展示，优化了明细展示。更新支持windows_exporter 0.13.0。",
+  "description": "View windows server status",
   "editable": true,
   "gnetId": 10467,
   "graphTooltip": 1,
   "id": null,
   "iteration": 1602471179424,
-  "links": [
-    {
-      "icon": "bolt",
-      "tags": [],
-      "targetBlank": true,
-      "title": "Update",
-      "tooltip": "更新当前仪表板",
-      "type": "link",
-      "url": "https://grafana.com/grafana/dashboards/10467"
-    },
-    {
-      "icon": "question",
-      "tags": [],
-      "targetBlank": true,
-      "title": "GitHub",
-      "tooltip": "查看更多仪表板",
-      "type": "link",
-      "url": "https://github.com/starsliao/Prometheus"
-    },
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "tags": [],
-      "targetBlank": true,
-      "type": "dashboards"
-    }
-  ],
+  "links": [],
   "panels": [
     {
       "collapsed": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -105,12 +79,12 @@
       },
       "id": 41,
       "panels": [],
-      "title": "资源总览（关联JOB项）当前选中主机：【$show_hostname】实例：$instance",
+      "title": "Resource overview (associated JOB item) currently selected host: [$show_hostname] instance: $instance",
       "type": "row"
     },
     {
       "columns": [],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -134,7 +108,7 @@
       "styles": [
         {
           "$$hashKey": "object:1557",
-          "alias": "操作系统",
+          "alias": "OS",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -155,7 +129,7 @@
         },
         {
           "$$hashKey": "object:1570",
-          "alias": "主机名",
+          "alias": "CPU",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -177,7 +151,7 @@
         },
         {
           "$$hashKey": "object:1609",
-          "alias": "instance(连接到明细)",
+          "alias": "instance(view detail)",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -190,7 +164,7 @@
           "link": true,
           "linkTargetBlank": false,
           "linkTooltip": "${__cell_4}",
-          "linkUrl": "/d/Kdh0OoSGz/?var-job=${__cell_5}&var-hostname=All&var-instance=${__cell_4}",
+          "linkUrl": "/d/Kdh0OoSGpl/?var-job=${__cell_5}&var-hostname=All&var-instance=${__cell_4}",
           "mappingType": 1,
           "pattern": "instance",
           "thresholds": [],
@@ -199,7 +173,7 @@
         },
         {
           "$$hashKey": "object:1622",
-          "alias": "CPU核数",
+          "alias": "CPU core count",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -217,7 +191,7 @@
         },
         {
           "$$hashKey": "object:1635",
-          "alias": "总内存",
+          "alias": "Total memory",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -235,7 +209,7 @@
         },
         {
           "$$hashKey": "object:2635",
-          "alias": "运行时间",
+          "alias": "Operation hours",
           "align": "auto",
           "colorMode": "cell",
           "colors": [
@@ -256,7 +230,7 @@
         },
         {
           "$$hashKey": "object:1809",
-          "alias": "C盘使用率",
+          "alias": "C drive usage rate",
           "align": "auto",
           "colorMode": "cell",
           "colors": [
@@ -277,7 +251,7 @@
         },
         {
           "$$hashKey": "object:1821",
-          "alias": "使用最多分区%",
+          "alias": "Partition usage %",
           "align": "auto",
           "colorMode": "cell",
           "colors": [
@@ -298,7 +272,7 @@
         },
         {
           "$$hashKey": "object:2286",
-          "alias": "进程数",
+          "alias": "Number of processes",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -317,7 +291,7 @@
         },
         {
           "$$hashKey": "object:2297",
-          "alias": "运行服务",
+          "alias": "Services running",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -335,7 +309,7 @@
         },
         {
           "$$hashKey": "object:3599",
-          "alias": "CPU使用率",
+          "alias": "CPU usage",
           "align": "auto",
           "colorMode": "cell",
           "colors": [
@@ -356,7 +330,7 @@
         },
         {
           "$$hashKey": "object:3610",
-          "alias": "内存使用率",
+          "alias": "Memory usage",
           "align": "auto",
           "colorMode": "cell",
           "colors": [
@@ -377,7 +351,7 @@
         },
         {
           "$$hashKey": "object:5929",
-          "alias": "CPU频率",
+          "alias": "CPU frequency",
           "align": "auto",
           "colorMode": null,
           "colors": [
@@ -448,7 +422,7 @@
           "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "CPU使用率",
+          "legendFormat": "CPU usage",
           "refId": "I"
         },
         {
@@ -464,7 +438,7 @@
           "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "内存使用率",
+          "legendFormat": "Memory usage",
           "refId": "J"
         },
         {
@@ -502,7 +476,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "$job：服务器资源总览",
+      "title": "$job: Overview of server resources",
       "transform": "table",
       "type": "table-old"
     },
@@ -511,7 +485,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
@@ -574,7 +548,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "各主机CPU使用率",
+      "title": "CPU usage of each host",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -624,7 +598,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -691,7 +665,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "各主机内存使用率",
+      "title": "Memory usage of each host",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -735,7 +709,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -803,7 +777,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_上传",
+          "legendFormat": "{{instance}}_Upload",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -831,7 +805,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_下载",
+          "legendFormat": "{{instance}}_Download",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -845,7 +819,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "各主机最大流量网卡网络详情",
+      "title": "Network details of the maximum traffic network card of each host",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -863,7 +837,7 @@
         {
           "$$hashKey": "object:4930",
           "format": "bps",
-          "label": "下载　　　　上传",
+          "label": "Download　　　　Upload",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -889,7 +863,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -957,7 +931,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_读取",
+          "legendFormat": "{{instance}}_Read",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -985,7 +959,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_写入",
+          "legendFormat": "{{instance}}_Write",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -999,7 +973,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "各主机最大磁盘读写详情",
+      "title": "Maximum disk read and write details of each host",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1017,7 +991,7 @@
         {
           "$$hashKey": "object:5258",
           "format": "Bps",
-          "label": "读取　　　　写入",
+          "label": "Read　　　　Write",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1044,7 +1018,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1112,7 +1086,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_读取",
+          "legendFormat": "{{instance}}_Read",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -1140,7 +1114,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{instance}}_写入",
+          "legendFormat": "{{instance}}_Write",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -1154,7 +1128,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "各主机最大磁盘IO详情",
+      "title": "Maximum disk IO details of each host",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1172,7 +1146,7 @@
         {
           "$$hashKey": "object:5486",
           "format": "iops",
-          "label": "读取　　　　写入",
+          "label": "Read　　　　Write",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1195,7 +1169,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1204,7 +1178,7 @@
       },
       "id": 43,
       "panels": [],
-      "title": "资源明细【$show_hostname：$instance】",
+      "title": "Resource details 【$show_hostname：$instance】",
       "type": "row"
     },
     {
@@ -1218,7 +1192,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 0,
       "description": "",
       "fieldConfig": {
@@ -1290,7 +1264,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "启动时长",
+      "title": "Start-up time",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1312,7 +1286,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -1379,7 +1353,7 @@
         }
       ],
       "thresholds": "60,90",
-      "title": "CPU使用率",
+      "title": "CPU usage",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1393,7 +1367,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1456,7 +1430,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "各分区使用率",
+      "title": "Utilization rate of each partition",
       "type": "bargauge"
     },
     {
@@ -1467,7 +1441,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1546,7 +1520,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "服务状态",
+      "title": "Service status",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1590,7 +1564,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": null,
       "fieldConfig": {
         "defaults": {
@@ -1648,7 +1622,7 @@
           "expr": "windows_os_processes{job=~\"$job\",instance=~\"$instance\"}",
           "instant": false,
           "interval": "",
-          "legendFormat": "进程数",
+          "legendFormat": "Number of processes",
           "refId": "A"
         }
       ],
@@ -1656,7 +1630,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "进程数",
+      "title": "Number of processes",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1707,7 +1681,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 0,
       "description": "",
       "fieldConfig": {
@@ -1781,7 +1755,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "CPU核数",
+      "title": "Number of CPU cores",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1802,7 +1776,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": null,
       "fieldConfig": {
         "defaults": {
@@ -1867,7 +1841,7 @@
         }
       ],
       "thresholds": "80,90",
-      "title": "内存使用率",
+      "title": "Memory usage",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1890,7 +1864,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 1,
       "description": "",
       "fieldConfig": {
@@ -1964,7 +1938,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "总内存",
+      "title": "Total memory",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1981,7 +1955,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
@@ -2035,7 +2009,7 @@
           "expr": "100 - avg(irate(windows_cpu_time_total{job=~\"$job\",instance=~\"$instance\",mode=\"idle\"}[5m]))*100",
           "hide": false,
           "interval": "",
-          "legendFormat": "CPU使用率",
+          "legendFormat": "CPU usage",
           "refId": "A"
         }
       ],
@@ -2043,7 +2017,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU使用率",
+      "title": "CPU usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2089,13 +2063,13 @@
         "Free virtual memory": "yellow",
         "Physical memory": "dark-red",
         "Virtual memory": "dark-purple",
-        "剩余物理内存": "green",
-        "总物理内存": "dark-red"
+        "Remaining physical memory": "green",
+        "Total physical memory": "dark-red"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 2,
       "fieldConfig": {
         "defaults": {
@@ -2141,7 +2115,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:225",
-          "alias": "/.*物理内存.*/",
+          "alias": "/.*Physical memory.*/",
           "linewidth": 2
         }
       ],
@@ -2168,7 +2142,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "总物理内存",
+          "legendFormat": "Total physical memory",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2196,7 +2170,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "剩余物理内存",
+          "legendFormat": "Remaining physical memory",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2244,7 +2218,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "内存详情",
+      "title": "Memory details",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2288,7 +2262,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -2333,7 +2307,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:7159",
-          "alias": "/总空间.*/",
+          "alias": "/Total space.*/",
           "color": "#F2495C"
         }
       ],
@@ -2360,7 +2334,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "剩余空间 {{volume}}",
+          "legendFormat": "Remaining space {{volume}}",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2388,7 +2362,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "总空间 {{volume}}",
+          "legendFormat": "Total space {{volume}}",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2402,7 +2376,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "磁盘剩余空间",
+      "title": "Free disk space",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2446,7 +2420,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -2514,7 +2488,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{nic}}-Sent-上传",
+          "legendFormat": "{{nic}}-Sent-Upload",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2541,7 +2515,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "{{nic}}-Received-下载",
+          "legendFormat": "{{nic}}-Received-download",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -2555,7 +2529,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "网络详情",
+      "title": "Network details",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2599,7 +2573,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -2707,7 +2681,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "磁盘读写",
+      "title": "Disk read and write",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2751,7 +2725,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -2857,7 +2831,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "磁盘IO",
+      "title": "Disk IO",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2901,7 +2875,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "decimals": 2,
       "fieldConfig": {
         "defaults": {
@@ -2957,7 +2931,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "网络使用率",
+      "title": "Network usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -3001,7 +2975,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -3150,7 +3124,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -3213,7 +3187,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "system_threads",
+          "legendFormat": "System threads",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -3227,7 +3201,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "system_threads",
+      "title": "System threads",
       "tooltip": {
         "shared": false,
         "sort": 0,
@@ -3271,7 +3245,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS__VICTORIAMETRICS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -3393,14 +3367,15 @@
   "style": "dark",
   "tags": [
     "Prometheus",
-    "windows_exporter"
+    "windows_exporter",
+    "CronData"
   ],
   "templating": {
     "list": [
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS__VICTORIAMETRICS}",
+        "datasource": "Prometheus",
         "definition": "label_values(windows_cs_hostname, job)",
         "hide": 0,
         "includeAll": false,
@@ -3422,11 +3397,11 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS__VICTORIAMETRICS}",
+        "datasource": "Prometheus",
         "definition": "label_values(windows_cs_hostname{job=~\"$job\"}, hostname)",
         "hide": 0,
         "includeAll": true,
-        "label": "主机名",
+        "label": "Hostame",
         "multi": false,
         "name": "hostname",
         "options": [],
@@ -3444,10 +3419,10 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS__VICTORIAMETRICS}",
+        "datasource": "Prometheus",
         "definition": "label_values(windows_cs_hostname{job=~\"$job\",hostname=~\"$hostname\"}, instance)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "instance",
         "multi": false,
         "name": "instance",
@@ -3466,11 +3441,11 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS__VICTORIAMETRICS}",
+        "datasource": "Prometheus",
         "definition": "label_values(windows_cs_hostname{job=~\"$job\",instance=~\"$instance\"}, hostname)",
         "hide": 2,
         "includeAll": false,
-        "label": "展示使用的主机名",
+        "label": "Show the hostname used",
         "multi": false,
         "name": "show_hostname",
         "options": [],
@@ -3515,8 +3490,8 @@
       "30d"
     ]
   },
-  "timezone": "",
-  "title": "1   windows_exporter for Prometheus Dashboard CN v20201012",
-  "uid": "Kdh0OoSGz",
+  "timezone": "UTC",
+  "title": "windows server dashboard",
+  "uid": "Kdh0OoSGpl",
   "version": 2
 }
