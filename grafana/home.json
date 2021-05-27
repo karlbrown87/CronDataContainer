@@ -1144,7 +1144,7 @@
           "item": {
             "filter": ""
           },
-          "legendFormat": "Received-下载",
+          "legendFormat": "Received-Download ",
           "metric": "mysql_global_status_questions",
           "mode": 0,
           "options": {
@@ -1158,7 +1158,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "网络详情",
+      "title": "Network details",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2351,6 +2351,6 @@
   },
   "timezone": "browser",
   "title": "Windows server overview",
-  "uid": "7UlnHoGZzs",
+  "uid": "crondatahome",
   "version": 1
 }
