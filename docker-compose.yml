@@ -118,8 +118,8 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
-      - DB_PASS=${DB_PASS}
       - CRONDATA_SERVER_HOST=${HOSTNAME}
+      - DB_PASS=${BD_PASS}
       - PROMETHEUS_TARGET_CONFIG_PATH=/etc/prometheus/targets
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
