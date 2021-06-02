@@ -79,7 +79,7 @@ services:
       mode: global
 
   grafana:
-    image: grafana/grafana
+    image: utmstack.azurecr.io/grafana
     user: "472"
     depends_on:
       - prometheus
