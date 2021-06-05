@@ -153,13 +153,14 @@ services:
       - 80:80
       - 3000:3000
       - 9090:9090
-      - 9091:9091
 
   filebrowser:
     restart: always
+  ports: 
+    - 9091:9091
     networks:
       - back-tier
-    image: "utmstack.azurecr.io/filebrowser:latest"
+    image: "utmstack.azurecr.io/filebrowser"
     volumes:
       - alert_data:/serv
     environment:
