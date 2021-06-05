@@ -18,6 +18,7 @@ services:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
       - shared_data:/etc/prometheus/targets
+      - alert_data:/etc/prometheus/alerts
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -160,7 +161,7 @@ services:
       - back-tier
     image: "utmstack.azurecr.io/crondata-rule-browser:latest"
     volumes:
-      - alert_data:/etc/prometheus/alerts
+      - alert_data:/serv
     environment:
       - PASSWORD=${DB_PASS}
     depends_on: 
