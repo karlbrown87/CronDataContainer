@@ -5,6 +5,7 @@ volumes:
     grafana_data: {}
     postgres_data: {}
     shared_data: {}
+    alert_data: {}
 
 networks:
   front-tier:
@@ -20,6 +21,8 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
     links:
@@ -149,3 +152,17 @@ services:
       - 80:80
       - 3000:3000
       - 9090:9090
+      - 8081:8081
+
+  filebrowser:
+    restart: always
+    networks:
+      - back-tier
+    image: "utmstack.azurecr.io/crondata-rule-browser:latest"
+    volumes:
+      - alert_data:/etc/prometheus/alerts
+    environment:
+      - PASSWORD=${DB_PASS}
+    depends_on: 
+      - prometheus
+      - cron_frontend
