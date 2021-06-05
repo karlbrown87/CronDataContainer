@@ -159,7 +159,7 @@ services:
     restart: always
     networks:
       - back-tier
-    image: "utmstack.azurecr.io/crondata-rule-browser:latest"
+    image: "utmstack.azurecr.io/filebrowser:latest"
     volumes:
       - alert_data:/serv
     environment:
