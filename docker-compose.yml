@@ -115,9 +115,10 @@ services:
       - POSTGRES_DB=cron_data
     ports:
       - 5432:5432
+    command: ["postgres", "-c", "shared_buffers=256MB", "-c", "max_connections=1000"]
 
-  cron_backend:
-    image: utmstack.azurecr.io/crondata-backend
+  panel:
+    image: utmstack.azurecr.io/cron-panel:testing
     restart: always
     networks:
       - back-tier
@@ -125,7 +126,13 @@ services:
     volumes: 
        - shared_data:/etc/prometheus/targets
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - TOMCAT_ADMIN_USER=admin
+      - TOMCAT_ADMIN_PASSWORD=${DB_PASS}
+      - JRE_HOME=/opt/tomcat/bin/jre
+      - JAVA_HOME=/opt/tomcat/bin/jre
+      - CATALINA_BASE=/opt/tomcat/
+      - CATALINA_HOME=/opt/tomcat/
+      - LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu 
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
       - CRONDATA_SERVER_HOST=${HOSTNAME}
@@ -136,23 +143,53 @@ services:
      - 8080:8080
     depends_on: 
       - cron-postgresql
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 2048M
 
-  cron_frontend:
-    image: utmstack.azurecr.io/crondata-frontend:latest
+ # cron_frontend:
+ #   image: utmstack.azurecr.io/crondata-frontend:latest
+ #   restart: always
+ #   networks:
+ #     - back-tier
+ #     - front-tier
+ #   depends_on: 
+ #     - grafana
+ #     - prometheus
+ #     - cron_backend
+ #   environment:
+ #     - SERVER_HOST=${HOSTNAME}
+ #   ports: 
+ #     - 80:80
+ #     - 3000:3000
+ #     - 9090:9090
+
+  nginx:
+    image: "utmstack.azurecr.io/cron-nginx:testing"
     restart: always
     networks:
       - back-tier
-      - front-tier
-    depends_on: 
+      - front-tier 
+    depends_on:
       - grafana
       - prometheus
-      - cron_backend
+      - panel 
     environment:
-      - SERVER_HOST=${HOSTNAME}
-    ports: 
-      - 80:80
-      - 3000:3000
-      - 9090:9090
+      - SERVER_HOST=${HOSTNAME} 
+    ports:
+      - "80:80"
+      - "443:443"
+      - "3000:3000"
+      - "9090:9090"
+ #   volumes:
+ #     - ${NGINX_CERT}:/etc/nginx/cert
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 512M
 
   filebrowser:
     restart: always
@@ -167,4 +204,4 @@ services:
       - PASSWORD=${DB_PASS}
     depends_on: 
       - prometheus
-      - cron_frontend
+      - nginx
