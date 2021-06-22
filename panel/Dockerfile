@@ -7,8 +7,8 @@ RUN useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 COPY tomcat.tar.gz /opt/
 COPY cron-data.zip /opt/
 RUN tar -xvf /opt/tomcat.tar.gz && cp -R /tomcat /opt/tomcat
-RUN unzip /opt/cron-data.zip && cp -R /cron-data/* /opt/tomcat/webapps
-RUN rm -R /cron-data /tomcat
+RUN unzip /opt/cron-data.zip && cp -R /CronDataFrontend/* /opt/tomcat/webapps
+RUN rm -R /CronDataFrontend /tomcat
 RUN rm /opt/tomcat.tar.gz /opt/cron-data.zip
 COPY application-prod.yml /opt/tomcat/webapps/crondata/WEB-INF/classes/config/application-prod.yml
 COPY server.xml /opt/tomcat/conf/server.xml
