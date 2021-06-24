@@ -54,7 +54,6 @@ services:
       restart_policy:
         condition: on-failure
 
-
   panel:
     image: utmstack.azurecr.io/cron-panel:testing
     volumes: 
