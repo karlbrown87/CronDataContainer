@@ -3,9 +3,12 @@ version: '3.7'
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    postgres_data: {}
+    shared_data: {}
+    alert_data: {}
 
 networks:
-  monitor-net:
+  crondata:
     driver: overlay
     name: inbound
   traefik:
@@ -22,11 +25,11 @@ services:
       - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
       - "--docker"
       - "--docker.swarmMode"
-      - "--docker.domain=docker.localhost"
+      - "--docker.domain=traefik.crondata"
       - "--docker.watch"
     networks:
       - traefik
-      - monitor-net
+      - crondata
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -51,24 +54,68 @@ services:
       restart_policy:
         condition: on-failure
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  panel:
+    image: utmstack.azurecr.io/cron-panel:testing
+    volumes: 
+      - shared_data:/etc/prometheus/targets
+    environment:
+      - TOMCAT_ADMIN_USER=admin
+      - TOMCAT_ADMIN_PASSWORD=Pa$$w0rd
+      - JRE_HOME=/opt/tomcat/bin/jre
+      - JAVA_HOME=/opt/tomcat/bin/jre
+      - CATALINA_BASE=/opt/tomcat/
+      - CATALINA_HOME=/opt/tomcat/
+      - LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu 
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
+      - CRONDATA_SERVER_HOST=${HOSTNAME}
+      - DB_PASS=Pa$$w0rd
+      - PROMETHEUS_TARGET_CONFIG_PATH=/etc/prometheus/targets
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+    depends_on: 
+      - cron-postgresql
     networks:
-      - monitor-net     
+      - crondata
     deploy:
       placement:
         constraints:
           - node.role==manager
       labels:
-          - "traefik.frontend.rule=Host:prometheus.localhost"
+          - "traefik.frontend.rule=Host:panel.crondata"
+          - "traefik.backend=panel"
+          - "traefik.port=8080"
+          - "traefik.docker.network=traefik"  
+      restart_policy:
+        condition: on-failure
+        
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+      - shared_data:/etc/prometheus/targets
+      - alert_data:/etc/prometheus/alerts
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    links:
+      - cadvisor:cadvisor
+      - alertmanager:alertmanager
+    depends_on:
+      - cadvisor	  
+    networks:
+      - crondata     
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      labels:
+          - "traefik.frontend.rule=Host:prometheus.crondata"
           - "traefik.backend=prometheus"
           - "traefik.port=9090"
           - "traefik.docker.network=traefik"
@@ -89,7 +136,7 @@ services:
     ports:
       - 9100:9100
     networks:
-      - monitor-net
+      - crondata
     deploy:
       mode: global
       restart_policy:
@@ -97,21 +144,24 @@ services:
 
   alertmanager:
     image: prom/alertmanager
-    ports:
-      - 9093:9093
     volumes:
       - "./alertmanager/:/etc/alertmanager/"
     networks:
-      - monitor-net
+      - crondata
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
     deploy:
       placement:
         constraints:
-           - node.role==manager
+          - node.role==manager
+      labels:
+          - "traefik.frontend.rule=Host:alertmanager.crondata"
+          - "traefik.backend=alertmanager"
+          - "traefik.port=9093"
+          - "traefik.docker.network=traefik"
       restart_policy:
-        condition: on-failure    
+        condition: on-failure 
 
   cadvisor:
     image: google/cadvisor
@@ -121,34 +171,75 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - 8088:8080
+      - 9001:8080
     networks:
-      - monitor-net
+      - crondata
     deploy:
       mode: global
       restart_policy:
         condition: on-failure
 
   grafana:
-    image: grafana/grafana
+    image: utmstack.azurecr.io/crondata-grafana
+    user: "472"
     depends_on:
       - prometheus
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/grafana_icon.svg:/usr/share/grafana/public/img/grafana_icon.svg:rw
+      - ./grafana/home.json:/usr/share/grafana/public/dashboards/home.json:rw
       - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/defaults.ini:/usr/share/grafana/conf/defaults.ini
     env_file:
       - ./grafana/config.monitoring
     networks:
-      - monitor-net
-    user: "472"
+      - crondata
     deploy:
       placement:
         constraints:
           - node.role==manager
       labels:
-        -  "traefik.frontend.rule=Host:grafana.localhost"
+        - "traefik.frontend.rule=Host:grafana.crondata"
         - "traefik.backend=grafana"
         - "traefik.port=3000"
         - "traefik.docker.network=traefik"
+      restart_policy:
+        condition: on-failure
+
+  cron-postgresql:
+    image: postgres:12.3
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./postgres/init.sh:/docker-entrypoint-initdb.d/init.sh
+    networks:
+      - crondata
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Pa$$w0rd
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=cron_data
+    ports:
+      - 5432:5432
+    command: ["postgres", "-c", "shared_buffers=256MB", "-c", "max_connections=1000"]
+  
+  filebrowser:
+    image: "utmstack.azurecr.io/filebrowser:testing"
+    volumes:
+      - alert_data:/serv
+    environment:
+      - PASSWORD=Pa$$w0rd
+    depends_on: 
+      - prometheus
+    networks:
+      - crondata
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      labels:
+          - "traefik.frontend.rule=Host:filebrowser.crondata"
+          - "traefik.backend=filebrowser"
+          - "traefik.port=9091"
+          - "traefik.docker.network=traefik" 
       restart_policy:
         condition: on-failure
