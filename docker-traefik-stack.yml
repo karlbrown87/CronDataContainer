@@ -193,6 +193,7 @@ services:
     image: utmstack.azurecr.io/crondata-panel:latest
     volumes: 
       - shared_data:/etc/prometheus/targets
+      - alert_data:/etc/prometheus/alerts
     environment:
       - TOMCAT_ADMIN_USER=admin
       - TOMCAT_ADMIN_PASSWORD=CronD4ta.2021*

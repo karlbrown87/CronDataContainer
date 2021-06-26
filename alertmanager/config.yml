@@ -7,5 +7,5 @@ route:
 receivers:
 - name: 'web.hook'
   webhook_configs:
-  - url: 'http://cron_backend:8080/api/alerts'
+  - url: 'http://panel:8080/crondata/api/alerts'
 
