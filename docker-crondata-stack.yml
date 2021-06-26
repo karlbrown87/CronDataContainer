@@ -23,7 +23,7 @@ services:
       - "--api"
       - "--docker"
       - "--docker.swarmMode"
-      - "--docker.domain=traefik.crondata.atlasinside.com"
+      - "--docker.domain=traefik.${DOMAIN}"
       - "--docker.watch"
       - "--logLevel=DEBUG"
       - "--accessLog"
@@ -82,7 +82,7 @@ services:
         constraints:
           - node.role==manager
       labels:
-          - "traefik.frontend.rule=Host:prometheus.crondata.atlasinside.com"
+          - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
           - "traefik.backend=prometheus"
           - "traefik.port=9090"
           - "traefik.docker.network=traefik"
@@ -123,7 +123,7 @@ services:
         constraints:
           - node.role==manager
       labels:
-          - "traefik.frontend.rule=Host:alertmanager.crondata.atlasinside.com"
+          - "traefik.frontend.rule=Host:alertmanager.${DOMAIN}"
           - "traefik.backend=alertmanager"
           - "traefik.port=9093"
           - "traefik.docker.network=traefik"
@@ -166,7 +166,7 @@ services:
         constraints:
           - node.role==manager
       labels:
-        - "traefik.frontend.rule=Host:grafana.crondata.atlasinside.com"
+        - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
         - "traefik.backend=grafana"
         - "traefik.port=3000"
         - "traefik.docker.network=traefik"
@@ -182,7 +182,7 @@ services:
       - crondata
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=CronD4ta.2021*
+      - POSTGRES_PASSWORD=${BD_PASS}
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=cron_data
     ports:
@@ -196,7 +196,7 @@ services:
       - alert_data:/etc/prometheus/alerts
     environment:
       - TOMCAT_ADMIN_USER=admin
-      - TOMCAT_ADMIN_PASSWORD=CronD4ta.2021*
+      - TOMCAT_ADMIN_PASSWORD=${BD_PASS}
       - JRE_HOME=/opt/tomcat/bin/jre
       - JAVA_HOME=/opt/tomcat/bin/jre
       - CATALINA_BASE=/opt/tomcat/
@@ -205,7 +205,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
       - CRONDATA_SERVER_HOST=${HOSTNAME}
-      - DB_PASS=CronD4ta.2021*
+      - DB_PASS=${BD_PASS}
       - PROMETHEUS_TARGET_CONFIG_PATH=/etc/prometheus/targets
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     depends_on: 
@@ -217,7 +217,7 @@ services:
         constraints:
           - node.role==manager
       labels:
-          - "traefik.frontend.rule=Host:crondata.atlasinside.com"
+          - "traefik.frontend.rule=Host:${DOMAIN}"
           - "traefik.backend=panel"
           - "traefik.port=8080"
           - "traefik.docker.network=traefik"  
@@ -230,7 +230,7 @@ services:
       - alert_data:/serv
       - alert_data:/etc/prometheus/alerts
     environment:
-      - PASSWORD=CronD4ta.2021*
+      - PASSWORD=${BD_PASS}
     depends_on: 
       - prometheus
     networks:
@@ -240,7 +240,7 @@ services:
         constraints:
           - node.role==manager
       labels:
-          - "traefik.frontend.rule=Host:filebrowser.crondata.atlasinside.com"
+          - "traefik.frontend.rule=Host:filebrowser.${DOMAIN}"
           - "traefik.backend=filebrowser"
           - "traefik.port=9091"
           - "traefik.docker.network=traefik"
