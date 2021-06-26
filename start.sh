@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source .env
 export HOSTNAME DOMAIN BD_PASS
 
