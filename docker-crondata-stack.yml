@@ -227,8 +227,7 @@ services:
   filebrowser:
     image: "utmstack.azurecr.io/crondata-filebrowser:latest"
     volumes:
-      - alert_data:/serv
-      - alert_data:/etc/prometheus/alerts
+      - alert_data:/srv
     environment:
       - PASSWORD=${BD_PASS}
     depends_on: 
