@@ -154,7 +154,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/grafana_icon.svg:/usr/share/grafana/public/img/grafana_icon.svg:rw
-      - ./grafana/home.json:/usr/share/grafana/public/dashboards/home.json:rw
+ #     - ./grafana/home.json:/usr/share/grafana/public/dashboards/home.json:rw
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/defaults.ini:/usr/share/grafana/conf/defaults.ini
     env_file:
