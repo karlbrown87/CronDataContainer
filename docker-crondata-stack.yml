@@ -227,7 +227,6 @@ services:
   filebrowser:
     image: "utmstack.azurecr.io/crondata-filebrowser:latest"
     volumes:
-      - alert_data:/serv
       - alert_data:/etc/prometheus/alerts
     environment:
       - PASSWORD=${BD_PASS}
@@ -242,7 +241,7 @@ services:
       labels:
           - "traefik.frontend.rule=Host:filebrowser.${DOMAIN}"
           - "traefik.backend=filebrowser"
-          - "traefik.port=9091"
+          - "traefik.port=8081"
           - "traefik.docker.network=traefik"
       restart_policy:
         condition: on-failure
