@@ -183,7 +183,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${BD_PASS}
-      - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=cron_data
     ports:
       - 5432:5432
