@@ -1,5 +1,5 @@
 groups:
-- name: Crondata
+- name: Crondata Instances
   rules:
 
   # Alert for any instance that is unreachable for >2 minutes.
