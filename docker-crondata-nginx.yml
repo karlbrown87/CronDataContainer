@@ -14,15 +14,15 @@ volumes:
 
 services:
   nginx:
-    image: "utmstack.azurecr.io/crondata-nginx:latest"
+    image: "utmstack.azurecr.io/crondata-frontend:latest"
     depends_on:
+      - panel
       - grafana
       - prometheus
-      - panel
       - alertmanager
       - filebrowser
     ports:
-      - "80:8080"
+      - "80:80"
       - "9090:9090"
       - "9093:9093"
       - "3000:3000"
@@ -105,18 +105,11 @@ services:
     command: ["postgres", "-c", "shared_buffers=256MB", "-c", "max_connections=1000"]
 
   panel:
-    image: utmstack.azurecr.io/crondata-panel:latest
+    image: utmstack.azurecr.io/crondata-backend:latest
     volumes:
       - shared_data:/etc/prometheus/targets
       - alert_data:/etc/prometheus/alerts
     environment:
-      - TOMCAT_ADMIN_USER=admin
-      - TOMCAT_ADMIN_PASSWORD=${BD_PASS}
-      - JRE_HOME=/opt/tomcat/bin/jre
-      - JAVA_HOME=/opt/tomcat/bin/jre
-      - CATALINA_BASE=/opt/tomcat/
-      - CATALINA_HOME=/opt/tomcat/
-      - LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu 
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cron-postgresql:5432/cron_data
       - CRONDATA_SERVER_HOST=${HOSTNAME}
@@ -126,6 +119,8 @@ services:
     depends_on:
       - cron-postgresql
       - prometheus
+    ports:
+      - 8080:8080
 
   filebrowser:
     image: "utmstack.azurecr.io/crondata-filebrowser:latest"
