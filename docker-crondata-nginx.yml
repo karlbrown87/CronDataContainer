@@ -22,11 +22,11 @@ services:
       - alertmanager
       - filebrowser
     ports:
-      - "80:80"
-      - "9090:9090"
-      - "9093:9093"
-      - "3000:3000"
-      - "8081:8081"
+      - 80:80
+      - 9090:9090
+      - 9093:9093
+      - 3000:3000
+      - 8081:8081
 
   prometheus:
     image: utmstack.azurecr.io/crondata-prometheus:latest
@@ -42,8 +42,6 @@ services:
       - '--web.enable-admin-api'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    depends_on:
-      - cadvisor
 
   node-exporter:
     image: utmstack.azurecr.io/crondata-node-exporter:latest
